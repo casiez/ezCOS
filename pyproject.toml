@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools >= 61.0", "odysseeapi", "argparse", "configparser", "pandas", "pymupdf"]
+requires = ["setuptools >= 61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "ezCOS"
-version = "0.0.1"
+version = "0.0.3"
 description = "Outil de simplification de la gestion des COS."
 readme = "Readme.md"
 authors = [
@@ -15,6 +15,15 @@ requires-python = ">=3.0"
 
 classifiers = [
     "Programming Language :: Python :: 3",
+]
+
+dependencies = [
+    "odysseeapi",
+    "argparse",
+    "configparser",
+    "pandas",
+    "pymupdf",
+    "unidecode"
 ]
 
 [project.urls]

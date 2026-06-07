@@ -15,13 +15,18 @@ ezCOS s'appuie sur [odysseeapi](https://github.com/casiez/OdysseeAPI/) pour inte
 pip install ezCOS -U
 ```
 
+ezCOS est installé dans le répertoire bin de votre environnement Python, et est accessible depuis la ligne de commande avec la commande `ezCOS`. Assurez-vous que le répertoire bin de votre environnement Python est dans votre variable d'environnement PATH pour pouvoir utiliser la commande `ezCOS` depuis n'importe quel répertoire.
+
 Créer un répertoire de travail pour le comité de sélection, puis y copier le fichier `config.ini`, les modèles de fichiers Excel et Word depuis le répertoire `templates` dans un répertoire `templates`. Copier également le contenu du répertoire `carbone`dans un répertoire du même nom.
 
 Modifier le fichier `config.ini` paramétrer Odyssee et modifier des chemins.
 
 La génération de documents s'appuie sur la librairie [Carbone](https://carbone.io/). Il faut installer [node.js](https://nodejs.org/) et [npm](https://www.npmjs.com/), puis installer Carbone avec la commande ```npm install carbone```.
 
-
+odysseeapi s'appuie sur [playwright](https://playwright.dev/python/). Il faut installer les navigateurs supportés par Playwright avec la commande suivante (uniquement la première fois) :
+```
+playwright install
+```
 
 ## Etapes
 
