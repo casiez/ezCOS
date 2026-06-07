@@ -9,6 +9,8 @@ ezCOS s'appuie sur [odysseeapi](https://github.com/casiez/OdysseeAPI/) pour inte
 
 ## Installation
 
+[Python](https://www.python.org/) et [pip](https://pip.pypa.io/en/stable/installation/) doivent être installés sur votre machine. Ensuite, installer ezCOS avec la commande suivante :
+
 ```
 pip install ezCOS -U
 ```
@@ -16,6 +18,10 @@ pip install ezCOS -U
 Créer un répertoire de travail pour le comité de sélection, puis y copier le fichier `config.ini`, les modèles de fichiers Excel et Word depuis le répertoire `templates` dans un répertoire `templates`. Copier également le contenu du répertoire `carbone`dans un répertoire du même nom.
 
 Modifier le fichier `config.ini` paramétrer Odyssee et modifier des chemins.
+
+La génération de documents s'appuie sur la librairie [Carbone](https://carbone.io/). Il faut installer [node.js](https://nodejs.org/) et [npm](https://www.npmjs.com/), puis installer Carbone avec la commande ```npm install carbone```.
+
+
 
 ## Etapes
 
