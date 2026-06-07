@@ -242,7 +242,7 @@ def getCandidatesInfos(folder):
     ]
     for pdf_file in pdf_files:
         txt = getTextFromPDF(pdf_file)
-        id = pdf_file.split("/")[-2].split("_")[-1]
+        id = os.path.split(pdf_file)[-2].split("_")[-1]
         infos = extractInfos(infos2extract, txt)
         infos["id"] = id
         candidates_infos.append(infos)
@@ -640,12 +640,14 @@ def main():
         generateImpartialite(xlsx_candidats)
 
     if args.r1:
+        loadAvisDetailles(xlsx_candidats)
         generateReportsReunion1(xlsx_candidats)
 
     if args.assignOdyssee:
         designationRapporteurs(xlsx_candidats, odyssee)
 
     if args.pvRepart:
+        loadAvisDetailles(xlsx_candidats)
         generatePVrepartition(xlsx_candidats)
 
     if args.attestationsVisio:

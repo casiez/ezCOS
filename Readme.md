@@ -17,9 +17,22 @@ pip install ezCOS -U
 
 ezCOS est installé dans le répertoire bin de votre environnement Python, et est accessible depuis la ligne de commande avec la commande `ezCOS`. Assurez-vous que le répertoire bin de votre environnement Python est dans votre variable d'environnement PATH pour pouvoir utiliser la commande `ezCOS` depuis n'importe quel répertoire.
 
-Créer un répertoire de travail pour le comité de sélection, puis y copier le fichier `config.ini`, les modèles de fichiers Excel et Word depuis le répertoire `templates` dans un répertoire `templates`. Copier également le contenu du répertoire `carbone`dans un répertoire du même nom.
+Créer un répertoire de travail pour le comité de sélection, puis créer le fichier `config.ini` avec les informations ci-dessous, les modèles de fichiers Excel et Word depuis le répertoire `templates` dans un répertoire `templates`. Copier également le contenu du répertoire `carbone`dans un répertoire du même nom.
 
-Modifier le fichier `config.ini` paramétrer Odyssee et modifier des chemins.
+```
+[ODYSSEE]
+numposte = 123456
+login = xxx@yyyy
+password = xxxxx
+
+[FILES]
+xlsx-candidats = monCOS.xlsx
+convocations-candidats = chemin absolu vers le répertoire convocationsCandidats
+
+[SOFTWARE]
+soffice = /Applications/LibreOffice.app/Contents/MacOS/soffice
+thunderbird-bin = /Applications/Thunderbird.app/Contents/MacOS/thunderbird
+```
 
 La génération de documents s'appuie sur la librairie [Carbone](https://carbone.io/). Il faut installer [node.js](https://nodejs.org/) et [npm](https://www.npmjs.com/), puis installer Carbone avec la commande ```npm install carbone```.
 
