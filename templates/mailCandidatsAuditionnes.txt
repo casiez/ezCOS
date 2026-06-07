@@ -1,0 +1,8 @@
+Bonjour {recipient},
+
+J'ai le plaisir de vous annoncer que le comité du poste XXXX a procédé à l'examen des candidatures et a établi la liste des candidats qu'il souhaite entendre, sur laquelle vous figurez.
+
+Votre audition se déroulera le <b>xxx 2026, à {heureAudition} salle xx à xxx</b>.
+Les détails du déroulement de l'audition sont présentés dans la convocation que vous trouverez en pièce jointe.
+
+xxxx

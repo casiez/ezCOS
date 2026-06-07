@@ -33,7 +33,7 @@
 import os
 import json
 from datetime import datetime
-import fitz
+import pymupdf
 import re
 
 def getColumnInfo(ws) -> list:
@@ -103,6 +103,13 @@ def computeAge(d) -> float:
     else:
         return 0
 
+def loadJson(filename):
+    """
+    Charge les données d'un fichier JSON et les retourne sous forme de dictionnaire.
+    """
+    with open(filename, 'r', encoding='utf8') as f:
+        return json.load(f)
+
 def saveJson(data, filename):
     """
     Sauvegarde les données dans un fichier JSON avec une indentation de 4 espaces et en préservant les caractères non ASCII.
@@ -120,13 +127,13 @@ def createDir(path):
 
 def getTextFromPDF(file):
     """
-    Extrait le texte d'un fichier PDF en utilisant la bibliothèque fitz (PyMuPDF).
+    Extrait le texte d'un fichier PDF en utilisant la bibliothèque pymupdf.
     Args:
         file (str): Le chemin du fichier PDF.
     Returns:
         str: Le texte extrait du PDF.
     """
-    pdf_document = fitz.open(file)
+    pdf_document = pymupdf.open(file)
     text = ""
 
     for page_num in range(pdf_document.page_count):
@@ -159,6 +166,24 @@ def extractInfo(info: str, txt: str, stopWord=None) -> str:
             res = res.replace("\n", "")
 
     return res
+
+def extractInfoRapport(info, txt, stopWord=None):
+    res = ""
+
+    if stopWord:
+        pattern = f"{info}(.*?){stopWord}"
+        match = re.search(pattern, txt, re.DOTALL)
+    else:
+        pattern = f"{info}(.*?)$"
+        match = re.search(pattern, txt, re.MULTILINE)
+
+    if match:
+        res = match.group(1).strip()
+        if res is not None:
+            res = res.replace("\n", "")
+
+    return res
+
 
 def formattxt(txt, prefix = " - "):
 	if (str(txt) == "") or (str(txt) == "nan"):

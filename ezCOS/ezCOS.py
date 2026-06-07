@@ -45,7 +45,7 @@ from tqdm import tqdm
 from unidecode import unidecode
 import tqdm
 
-from utils.tools import getColumnInfo, populateSheet, computeAge, loadJson, saveJson, createDir, getTextFromPDF, extractInfo, formatPrenom, formatLieu, formattxt, cleantext, thunderbird, trAvis, extractInfoRapport
+from .utils.tools import getColumnInfo, populateSheet, computeAge, loadJson, saveJson, createDir, getTextFromPDF, extractInfo, formatPrenom, formatLieu, formattxt, cleantext, thunderbird, trAvis, extractInfoRapport
 
 
 def populateXLSX(template_dir, template_file, odyssee, candidates_folder):
@@ -578,21 +578,16 @@ def sendMailAuditionnes(file, config):
         subject = "Convocation à l'audition du poste XXXX"
         recipient = "%s %s"%(c["prenomcandidat"], c["nomcandidat"])
         recipient = recipient.lower().title()
+        c['recipient'] = recipient
         print('%s/%s.pdf'%(config['FILES']['convocations-candidats'], c['nomfichierCandidat']))
-        message = f"""Bonjour {recipient},
-
-J'ai le plaisir de vous annoncer que le comité du poste XXXX a procédé à l'examen des candidatures et a établi la liste des candidats qu'il souhaite entendre, sur laquelle vous figurez.
-
-Votre audition se déroulera le <b>xxx 2026, à {c['heureAudition']} salle xx à xxx</b>.
-Les détails du déroulement de l'audition sont présentés dans la convocation que vous trouverez en pièce jointe.
-
-xxxx
-
-        """ 
+        # Read the content of templates/mailCandodatsAuditionnes.txt
+        with open('templates/mailCandidatsAuditionnes.txt', 'r') as f:
+            mail_template = f.read()
+        message = mail_template.format_map(c)
         thunderbird(config['SOFTWARE']['thunderbird-bin'], recipientName=recipient, recipientAddress=c['email'], thesubject=subject, thecontent=message, cc='', attachment='%s/%s.pdf'%(config['FILES']['convocations-candidats'], c['nomfichierCandidat']))
 
 
-if __name__ == "__main__":
+def main():
     config = configparser.ConfigParser()
     config.read("config.ini")
 
@@ -622,8 +617,6 @@ if __name__ == "__main__":
 
     xlsx_candidats = config['FILES']['xlsx-candidats']
     soffice = config['SOFTWARE']['soffice']
-
-    loadAvisDetailles(xlsx_candidats)
 
     if args.auth:
         login = config["ODYSSEE"]["login"]
@@ -659,6 +652,7 @@ if __name__ == "__main__":
         generateAttestationsVisio(xlsx_candidats)
 
     if args.reports:
+        loadAvisDetailles(xlsx_candidats)
         downloadReports(odyssee, "rapportsOdyssee")
 
     if args.reports2xlsx:
@@ -668,10 +662,15 @@ if __name__ == "__main__":
         avisCandidatEtVotePremiereReunion(config["FILES"]["xlsx-candidats"],  odyssee)
 
     if args.convocCandidats:
+        loadAvisDetailles(xlsx_candidats)
         generateLettresAuditionnes(xlsx_candidats)
 
     if args.convocCandidatsPDF:
         os.system('cd convocationsCandiats; %s --headless --convert-to pdf *.docx'%soffice)
 
     if args.envoimailauditionnes:
+        loadAvisDetailles(xlsx_candidats)
         sendMailAuditionnes(xlsx_candidats, config)
+
+if __name__ == "__main__":
+    main()
