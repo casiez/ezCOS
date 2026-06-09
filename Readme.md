@@ -3,9 +3,9 @@
 [![PyPI Version](https://img.shields.io/pypi/v/ezCOS)](https://pypi.org/project/ezCOS/)
 [![Downloads](https://static.pepy.tech/badge/ezCOS)](https://pepy.tech/project/ezCOS)
 
-Outil pour faciliter la gestion des comités de sélection (COS) dans les établissements d'enseignement supérieur. Il permet de télécharger les dossiers des candidats depuis Odyssee, de les décompresser et de remplir automatiquement un fichier Excel avec les informations pertinentes sur les candidats... (voir ci-dessous)
+Outil pour faciliter la gestion des comités de sélection (COS) dans les établissements d'enseignement supérieur. Il permet de télécharger les dossiers des candidats depuis Odyssée, de les décompresser et de remplir automatiquement un fichier Excel avec les informations pertinentes sur les candidats... (voir ci-dessous)
 
-ezCOS s'appuie sur [odysseeapi](https://github.com/casiez/OdysseeAPI/) pour interagir avec la plateforme Odyssee.
+ezCOS s'appuie sur [OdysseeAPI](https://github.com/casiez/OdysseeAPI/) pour interagir avec la plateforme Odyssée.
 
 ## Installation
 
@@ -15,7 +15,7 @@ ezCOS s'appuie sur [odysseeapi](https://github.com/casiez/OdysseeAPI/) pour inte
 pip install ezCOS -U
 ```
 
-ezCOS est installé dans le répertoire bin de votre environnement Python, et est accessible depuis la ligne de commande avec la commande `ezCOS`. Assurez-vous que le répertoire bin de votre environnement Python est dans votre variable d'environnement PATH pour pouvoir utiliser la commande `ezCOS` depuis n'importe quel répertoire.
+ezCOS est installé dans le répertoire bin de votre environnement Python, et est accessible depuis la ligne de commande avec la commande `ezCOS`. Assurez-vous que le répertoire correspondant de votre environnement Python est dans votre variable d'environnement PATH pour pouvoir utiliser la commande `ezCOS` depuis n'importe quel répertoire.
 
 Créer un répertoire de travail pour le comité de sélection, puis créer le fichier `config.ini` avec les informations ci-dessous, les modèles de fichiers Excel et Word depuis le répertoire `templates` dans un répertoire `templates`. Copier également le contenu du répertoire `carbone`dans un répertoire du même nom.
 
@@ -80,12 +80,12 @@ playwright install
    L'option `-r1` lance le processus de génération des modèles de rapports pré-complétés pour les rapporteurs, avec les infos des candidats et à partir du modèle `templates/NOMCANDIDATprenom-NOMRAPPORTEUR.docx`. Les rapports sont générés au format DOCX et sauvegardés dans le répertoire `rapportsMembresReunion1`.
 
 1. Affectation des rapporteurs sur Odyssee :
-   ````
+   ```
    ezCOS -auth -assignOdyssee
    ```
-   L'option `-assignOdyssee` lance le processus d'affectation des rapporteurs sur Odyssee, en utilisant les informations du fichier Excel. Les rapporteurs sont affectés aux candidats sur Odyssee en fonction des choix faits dans les colonnes "Rapporteur1" et "Rapporteur2" du fichier Excel.
+   L'option `-assignOdyssee` lance le processus d'affectation des rapporteurs sur Odyssée, en utilisant les informations du fichier Excel. Les rapporteurs sont affectés aux candidats sur Odyssée en fonction des choix faits dans les colonnes "Rapporteur1" et "Rapporteur2" du fichier Excel.
 
-   Vérifier le résultat de l'affectation des rapporteurs sur Odyssee.
+   Vérifier le résultat de l'affectation des rapporteurs sur Odyssée.
 
 1. Génération du PV de répartition des rapporteurs :
    ```
@@ -99,11 +99,11 @@ playwright install
    ```
    L'option `-attestationsVisio` lance le processus de génération des attestations de participation en visio pour les membres du comité, à partir du modèle `templates/Attestation_visioconference_membre.docx`. Les attestations sont générées au format DOCX et sauvegardées dans le répertoire `attestationsVisio`.
 
-1. Téléchargement des rapports des rapporteurs depuis Odyssee :
+1. Téléchargement des rapports des rapporteurs depuis Odyssée :
    ```
    ezCOS -auth -reports
    ```
-   L'option `-reports` lance le processus de téléchargement des rapports des rapporteurs depuis Odyssee. Les rapports sont téléchargés au format PDF et sauvegardés dans le répertoire `rapportsOdyssee`.
+   L'option `-reports` lance le processus de téléchargement des rapports des rapporteurs depuis Odyssée. Les rapports sont téléchargés au format PDF et sauvegardés dans le répertoire `rapportsOdyssee`.
 
 1. Extraction des avis des rapports des rapporteurs et mise à jour du fichier Excel :
    ```
@@ -119,7 +119,7 @@ playwright install
    
    Les résultats du vote sont dans les colonnes correspondantes du fichier Excel.
 
-   Vérifier le résultat de la mise à jour des avis et des votes sur Odyssee.
+   Vérifier le résultat de la mise à jour des avis et des votes sur Odyssée.
 
 1. Génération des convocations pour les candidats auditionnés :
    ```
