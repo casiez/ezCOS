@@ -17,6 +17,14 @@ pip install ezCOS -U
 
 ezCOS est installé dans le répertoire bin de votre environnement Python, et est accessible depuis la ligne de commande avec la commande `ezCOS`. Assurez-vous que le répertoire correspondant de votre environnement Python est dans votre variable d'environnement PATH pour pouvoir utiliser la commande `ezCOS` depuis n'importe quel répertoire.
 
+Si vous ne trouvez pas où est installé ezCOS, vous pouvez exécuter :
+
+```
+pip show ezCOS
+```
+
+A partir du chemin indiqué dans la section "Location", vous pouvez remonter l'arborescence jusqu'à trouver le répertoire `bin` dans un sous-répertoire.
+
 Créer un répertoire de travail pour le comité de sélection, puis créer le fichier `config.ini` avec les informations ci-dessous, les modèles de fichiers Excel et Word depuis le répertoire `templates` dans un répertoire `templates`. Copier également le contenu du répertoire `carbone`dans un répertoire du même nom.
 
 ```

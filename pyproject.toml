@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ezCOS"
-version = "0.1.0"
+version = "0.1.1"
 description = "Outil de simplification de la gestion des COS."
 readme = "Readme.md"
 authors = [
     { name = "Géry Casiez", email = "gery.casiez@univ-lille.fr" },
 ]
 
-requires-python = ">=3.0"
+requires-python = ">=3.12"
 
 classifiers = [
     "Programming Language :: Python :: 3",
