@@ -593,6 +593,7 @@ def main():
 
     parser = argparse.ArgumentParser(description='ezCOS - un outil pour faciliter la gestion des comités de sélection')
     parser.add_argument('-auth', help = 'Authentification sur Odyssee', action="store_true")
+    parser.add_argument('-updateCache', help = 'Pour forcer la mise à jour du cache', action="store_true")
     parser.add_argument('-downloadApplications', help = 'Téléchargement des dossiers des candidats', action="store_true")
     parser.add_argument('-unzipApplications', help = 'Décompression des dossiers des candidats', action="store_true")
     parser.add_argument('-populateXLSX', help = 'Récupération des infos sur les candidats sur Odyssee', action="store_true")
@@ -611,7 +612,12 @@ def main():
     args = parser.parse_args()
 
     numposte = config["ODYSSEE"]["numposte"]
-    odyssee = OdysseeCOS(numposte)
+
+    useCache = True
+    if args.updateCache:
+        useCache = False
+
+    odyssee = OdysseeCOS(numposte, useCache)
 
     candidates_folder = "dossiers_candidats"
 

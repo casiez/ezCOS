@@ -25,7 +25,7 @@ pip show ezCOS
 
 A partir du chemin indiqué dans la section "Location", vous pouvez remonter l'arborescence jusqu'à trouver le répertoire `bin` dans un sous-répertoire.
 
-Créer un répertoire de travail pour le comité de sélection, puis créer le fichier `config.ini` avec les informations ci-dessous, les modèles de fichiers Excel et Word depuis le répertoire `templates` dans un répertoire `templates`. Copier également le contenu du répertoire `carbone`dans un répertoire du même nom.
+Créer un répertoire de travail pour le comité de sélection, puis créer le fichier `config.ini` avec les informations ci-dessous, copier les modèles de fichiers Excel et Word depuis le répertoire `templates` dans un répertoire `templates`. Copier également le contenu du répertoire `carbone`dans un répertoire du même nom.
 
 ```
 [ODYSSEE]
@@ -42,56 +42,58 @@ soffice = /Applications/LibreOffice.app/Contents/MacOS/soffice
 thunderbird-bin = /Applications/Thunderbird.app/Contents/MacOS/thunderbird
 ```
 
-La génération de documents s'appuie sur la librairie [Carbone](https://carbone.io/). Il faut installer [node.js](https://nodejs.org/) et [npm](https://www.npmjs.com/), puis installer Carbone avec la commande ```npm install carbone```.
+La génération de documents s'appuie sur la librairie [Carbone](https://carbone.io/). Il faut installer [node.js](https://nodejs.org/) et [npm](https://www.npmjs.com/), puis installer Carbone avec la commande ```npm install carbone```. Si cette librairie n'est pas installée, les autres commandes (téléchargement dossiers...) restent fonctionnelles.
 
-odysseeapi s'appuie sur [playwright](https://playwright.dev/python/). Il faut installer les navigateurs supportés par Playwright avec la commande suivante (uniquement la première fois) :
+OdysseeAPI s'appuie sur [playwright](https://playwright.dev/python/). Il faut installer les navigateurs supportés par Playwright avec la commande suivante (à faire une seule fois après l'installation de ezCOS) :
 ```
 playwright install
 ```
 
 ## Etapes
 
+A tout moment, vous pouvez exécuter la commande `ezCOS -h` pour afficher l'aide et les différentes options disponibles. L'option `-updateCache` permet de forcer la mise à jour du cache des données d'Odyssée, ce qui peut être utile si les données ont changé depuis la dernière exécution.
+
 1. Télécharger les dossiers des candidats depuis Odyssee :
    ```
    ezCOS -auth -downloadApplications
    ```
-   L'option `-auth` permet de s'authentifier auprès d'Odyssee pour accéder aux dossiers des candidats. L'option `-downloadApplications` lance le processus de téléchargement des dossiers. Les archives zip des dossiers sont téléchargés dans le répertoire `dossiers_candidats`.
+   L'option `-auth` permet de s'authentifier auprès d'Odyssee pour accéder aux dossiers des candidats. L'option `-downloadApplications` télécharge les archives zip des dossiers dans le répertoire `dossiers_candidats`.
 
 1. Décompresser les dossiers des candidats :
    ```
    ezCOS -unzipApplications
    ```
-   L'option `-unzipApplications` lance le processus de décompression des archives zip téléchargées. Les dossiers décompressés se trouvent dans le répertoire `dossiers_candidats`.
+   L'option `-unzipApplications` décompresse les archives zip téléchargées dans le répertoire `dossiers_candidats`.
 
 1. Remplir automatiquement un fichier Excel avec les informations sur les candidats :
    ```
    ezCOS -auth -populateXLSX
    ```
-   L'option `-populateXLSX` lance le processus de remplissage du fichier Excel avec les informations extraites des dossiers des candidats. Le fichier `templates/comite.xlsx` est utilisé comme modèle pour créer le fichier `comitePopulated.xlsx` qui contient les informations des candidats et des membres du comité.
+   L'option `-populateXLSX` complète le fichier Excel avec les informations d'Odyssée ainsi que des informations extraites des dossiers des candidats (fichiers qui commencent par `Edition_Dossier`). Le fichier `templates/comite.xlsx` est utilisé comme modèle pour créer le fichier `comitePopulated.xlsx` qui contient les informations des candidats et des membres du comité.
 
    A cette étape, il faut renommer le fichier `comitePopulated.xlsx` en utilisant celui défini dans la section [FILES] du fichier `config.ini` (ex: `comite.xlsx`).
 
-   Dans la feuille "Candidats" du fichier Excel, affecter les rapporteurs à chaque candidat en utilisant les listes déroulantes dans la colonne "Rapporteur1" et "Rapporteur2". Les membres du comité sont listés dans l'onglet "MembresComite" du fichier Excel.
+   Dans la feuille "Candidats" du fichier Excel, affecter les rapporteurs à chaque candidat en utilisant les listes déroulantes dans la colonne "Rapporteur1" et "Rapporteur2". Les membres du comité sont listés dans la feuille "MembresComite" du fichier Excel.
 
-   Dans l'onglet "MembresComite", compléter la section et le statut de chaque membre du comité (Interne / Externe).
+   Dans la feuille "MembresComite", compléter la section et le statut de chaque membre du comité (Interne / Externe).
 
 1. Générer les avis d'impartialité pour les membres du comité :
    ```
    ezCOS -impartialite
    ```
-   L'option `-impartialite` lance le processus de génération des déclarations d'impartialité pour les membres du comité, à partir du modèle `templates/Impartialite.xlsx`. Les décalrations sont sauvegardées dans le répertoire `impartialite`.
+   L'option `-impartialite` génère les déclarations d'impartialité pour les membres du comité, à partir du modèle `templates/Impartialite.xlsx`. Les déclarations sont sauvegardées dans le répertoire `impartialite`.
 
 1. Génération des modèles de rapports pré-complétés pour les rapporteurs :
    ```
    ezCOS -r1
    ```
-   L'option `-r1` lance le processus de génération des modèles de rapports pré-complétés pour les rapporteurs, avec les infos des candidats et à partir du modèle `templates/NOMCANDIDATprenom-NOMRAPPORTEUR.docx`. Les rapports sont générés au format DOCX et sauvegardés dans le répertoire `rapportsMembresReunion1`.
+   L'option `-r1` génère les modèles de rapports pré-complétés pour les rapporteurs avec les infos des candidats, à partir du modèle `templates/NOMCANDIDATprenom-NOMRAPPORTEUR.docx`. Les rapports sont générés au format DOCX et sauvegardés dans le répertoire `rapportsMembresReunion1`.
 
 1. Affectation des rapporteurs sur Odyssee :
    ```
    ezCOS -auth -assignOdyssee
    ```
-   L'option `-assignOdyssee` lance le processus d'affectation des rapporteurs sur Odyssée, en utilisant les informations du fichier Excel. Les rapporteurs sont affectés aux candidats sur Odyssée en fonction des choix faits dans les colonnes "Rapporteur1" et "Rapporteur2" du fichier Excel.
+   L'option `-assignOdyssee` affecte les rapporteurs sur Odyssée, en utilisant les informations du fichier Excel. Les rapporteurs sont affectés aux candidats sur Odyssée en fonction des choix faits dans les colonnes "Rapporteur1" et "Rapporteur2" du fichier Excel.
 
    Vérifier le résultat de l'affectation des rapporteurs sur Odyssée.
 
@@ -99,31 +101,31 @@ playwright install
    ```
    ezCOS -pvRepart
    ```
-   L'option `-pvRepart` lance le processus de génération du PV de répartition des rapporteurs, à partir du modèle `templates/PVrepartition.docx`. Le PV est sauvegardé sous le nom `PVrepartitionRapporteurs.docx`.
+   L'option `-pvRepart` génère le PV de répartition des rapporteurs, à partir du modèle `templates/PVrepartition.docx`. Le PV est sauvegardé sous le nom `PVrepartitionRapporteurs.docx`.
 
 1. Génération des attestations de participation en visio pour les membres du comité :
    ```
    ezCOS -attestationsVisio
    ```
-   L'option `-attestationsVisio` lance le processus de génération des attestations de participation en visio pour les membres du comité, à partir du modèle `templates/Attestation_visioconference_membre.docx`. Les attestations sont générées au format DOCX et sauvegardées dans le répertoire `attestationsVisio`.
+   L'option `-attestationsVisio` génère les attestations de participation en visio pour les membres du comité, à partir du modèle `templates/Attestation_visioconference_membre.docx`. Les attestations sont générées au format DOCX et sauvegardées dans le répertoire `attestationsVisio`.
 
 1. Téléchargement des rapports des rapporteurs depuis Odyssée :
    ```
    ezCOS -auth -reports
    ```
-   L'option `-reports` lance le processus de téléchargement des rapports des rapporteurs depuis Odyssée. Les rapports sont téléchargés au format PDF et sauvegardés dans le répertoire `rapportsOdyssee`.
+   L'option `-reports` télécharge les rapports des rapporteurs depuis Odyssée. Les rapports sont téléchargés au format PDF et sauvegardés dans le répertoire `rapportsOdyssee`.
 
 1. Extraction des avis des rapports des rapporteurs et mise à jour du fichier Excel :
    ```
    ezCOS -reports2xlsx
    ```
-   L'option `-reports2xlsx` lance le processus d'extraction des avis des rapports des rapporteurs et de mise à jour du fichier Excel. Les avis sont extraits des rapports PDF téléchargés à l'étape précédente, puis reportés dans les colonnes "AvisRapp1" et "AvisRapp2" du fichier Excel. Par précaution, le script crée une copie du fichier Excel avant de le modifier, avec le suffixe "-2". Les avis sont ensuite à copier dans le fichier Excel original.
+   L'option `-reports2xlsx` extrait les avis des rapports des rapporteurs et met à jour le fichier Excel. Les avis sont extraits des rapports PDF téléchargés à l'étape précédente, puis reportés dans les colonnes "AvisRapp1" et "AvisRapp2" du fichier Excel. Par précaution, le script crée une copie du fichier Excel avant de le modifier, avec le suffixe "-2". Les avis sont ensuite à copier dans le fichier Excel original. Cette option reste expérimentale et peut produire des erreurs d'extraction.
 
 1. Avis par candidat et vote suite à la première réunion du comité de sélection :
    ```
    ezCOS -auth -avisPremiereReunion
    ```
-   L'option `-avisPremiereReunion` utilise la colonne "AvisAudition" du fichier Excel pour générer un avis global. Les lignes de cette colonne doivent être remplies avec des codes (ex: "A", "B", "C", "D") séparés par des virgules, et définis dans la feuille AvisDetailles du fichier Excel. Les candidats auditionnés doivent avoir au moinns un avis "A" dans cette colonne.
+   L'option `-avisPremiereReunion` utilise la colonne "AvisAudition" du fichier Excel pour générer un avis global. Les lignes de cette colonne doivent être remplies avec des codes (ex: "A", "B", "C", "D") séparés par des virgules, et définis dans la feuille AvisDetailles du fichier Excel. Les candidats auditionnés doivent avoir au moins un avis "A" dans cette colonne.
    
    Les résultats du vote sont dans les colonnes correspondantes du fichier Excel.
 
@@ -133,19 +135,19 @@ playwright install
    ```
    ezCOS -convocCandidats
    ```
-   L'option `-convocCandidats` lance le processus de génération des convocations pour les candidats auditionnés, à partir du modèle `templates/Convocation_candidats.docx`. Les convocations sont générées au format DOCX et sauvegardées dans le répertoire `convocationsAuditions`.
+   L'option `-convocCandidats` génère les convocations pour les candidats auditionnés, à partir du modèle `templates/Convocation_candidats.docx`. Les convocations sont générées au format DOCX et sauvegardées dans le répertoire `convocationsAuditions`.
 
 1. Conversion au format PDF des convocations pour les candidats auditionnés :
    ```
    ezCOS -convocCandidatsPDF
    ```
-   L'option `-convocCandidatsPDF` lance le processus de conversion au format PDF des convocations pour les candidats auditionnés, à partir des fichiers DOCX générés à l'étape précédente. Les convocations au format PDF sont sauvegardées dans le répertoire `convocationsAuditions`.
+   L'option `-convocCandidatsPDF` convertit au format PDF les convocations pour les candidats auditionnés, à partir des fichiers DOCX générés à l'étape précédente. Les convocations au format PDF sont sauvegardées dans le répertoire `convocationsAuditions`.
 
 1. Envoi des convocations aux candidats auditionnés par email :
    ```
    ezCOS -envoimailauditionnes
    ```
-   L'option `-envoimailauditionnes` lance le processus d'envoi des convocations aux candidats auditionnés par email, en utilisant les adresses email extraites des dossiers des candidats. Les convocations au format PDF sont envoyées en pièce jointe.
+   L'option `-envoimailauditionnes` prépare les convocations aux candidats auditionnés par email, en utilisant les adresses email extraites des dossiers des candidats. Les convocations au format PDF ajoutées en pièce jointe.
 
    Le template `templates/mailCandidatsAuditionnes.txt` est utilisé pour le corps du mail.
 
