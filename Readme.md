@@ -49,6 +49,8 @@ OdysseeAPI s'appuie sur [playwright](https://playwright.dev/python/). Il faut in
 playwright install
 ```
 
+Si vous rencontrez des problèmes d'authentification avec Odyssée, vous pouvez utiliser un token d'authentification à la place du login et du mot de passe. Pour cela, utilisez l'option `-usetoken` lors de l'exécution de la commande `ezCOS -auth`, et ajoutez le token dans le fichier `config.ini` sous la section `[ODYSSEE]` avec la clé `token`. Pour obtenir le token, connectez-vous à Odyssée en utilisant Chrome, puis ouvrez la console de développement (F12), allez dans l'onglet "Network", puis copiez la valeur "Authorization" de n'importe quelle requête. Ce token est renouvellé régulièrement, donc il faudra le mettre à jour dans le fichier `config.ini` si vous utilisez cette méthode d'authentification.
+
 ## Etapes
 
 A tout moment, vous pouvez exécuter la commande `ezCOS -h` pour afficher l'aide et les différentes options disponibles. L'option `-updateCache` permet de forcer la mise à jour du cache des données d'Odyssée, ce qui peut être utile si les données ont changé depuis la dernière exécution.

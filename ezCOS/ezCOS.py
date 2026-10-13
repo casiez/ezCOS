@@ -58,7 +58,7 @@ def populateXLSX(template_dir, template_file, odyssee, candidates_folder):
 
     mapping = {
         "idKeycloak": {"column": "ID"},
-        "nomUsage": {"column": "Nom"},
+        "nomUsage": {"column": "Nom", "transformation": lambda x: x.upper() if x else ""},
         "prenom": {"column": "Prénom", "transformation": formatPrenom},
         "civilite": {"column": "H/F", "transformation": lambda x: "H" if x == 1 else "F" },
         "rang": {"column": "Corps"},
@@ -323,6 +323,7 @@ def checkAvis(avis):
     for a in avis:
         if a not in avisdetailles.keys():
             print("ERROR: avis " + a + " not found")
+    return [a for a in avis if a in avisdetailles.keys()]
 
 def getAvisTexte(avis):
     if avis == None:
@@ -384,7 +385,7 @@ def getCandidateData(r, rapNum):
     c["adresse"] = formatAdresse(r)
     c["avisboolean"] = avisboolean
     c["avis"] = avis
-    c["email"] = r['Email']
+    c["email"] = r['Email'] if str(r['Email']) != "nan" else ""
     c["avistexte"] = avistexte
 
     c["nomfichier"] = unidecode("%s_%s-%s"%(r["Nom d'usage"].replace(" ","_"), \
@@ -423,7 +424,7 @@ def generateReportsReunion1(file):
 def findRapporteur(nomprenom, rapporteurs):
     if pd.isna(nomprenom):
         return None
-    return next((r for r in rapporteurs if "%s %s"%(r["nomUsage"], r["prenom"]) == unidecode(nomprenom.upper())), None)
+    return next((r for r in rapporteurs if "%s %s"%(r["nomUsage"].upper(), r["prenom"].upper()) == unidecode(nomprenom.upper())), None)
 
 def designationRapporteurs(file, odyssee):
     df = pd.read_excel(file, sheet_name="Candidats")
@@ -517,12 +518,10 @@ def reportRapporteursAvis(xlsxFile: str):
     print(f"Avis des rapporteurs reportés dans le fichier {newFile}")
 
 def avisCandidatEtVotePremiereReunion(xlsxFile, odyssee):
-    avisdetailles = loadAvisDetailles(xlsxFile)
-
     df = pd.read_excel(xlsxFile, sheet_name="Candidats")
     for _, r in tqdm.tqdm(df.iterrows(), desc="Enregistrement des avis de la première réunion"):
         id_candidat = r["ID"]
-        avis = getListAvis(r)
+        avis = "A" if "A" in getListAvis(r) else "D"
         cleaned_avis = checkAvis(avis)
         motif = getAvisTexte(cleaned_avis)
         nombreVotants, suffragesExprimes, bulletinsNuls, bulletinsBlancs, bulletinsEnAccord, bulletinsEnDesaccord = r["nombreVotants"], r["suffragesExprimes"], r["bulletinsNuls"], r["bulletinsBlancs"], r["bulletinsEnAccord"], r["bulletinsEnDesaccord"]
@@ -593,6 +592,7 @@ def main():
 
     parser = argparse.ArgumentParser(description='ezCOS - un outil pour faciliter la gestion des comités de sélection')
     parser.add_argument('-auth', help = 'Authentification sur Odyssee', action="store_true")
+    parser.add_argument('-usetoken', help = "Utilisation d'un token d'authentification au lieu de l'authentification par mot de passe", action="store_true")
     parser.add_argument('-updateCache', help = 'Pour forcer la mise à jour du cache', action="store_true")
     parser.add_argument('-downloadApplications', help = 'Téléchargement des dossiers des candidats', action="store_true")
     parser.add_argument('-unzipApplications', help = 'Décompression des dossiers des candidats', action="store_true")
@@ -627,7 +627,10 @@ def main():
     if args.auth:
         login = config["ODYSSEE"]["login"]
         password = config["ODYSSEE"]["password"]
-        odyssee.authenticate(login, password)
+        if args.usetoken:
+            odyssee.authenticate_using_token(config["ODYSSEE"]["token"])
+        else:
+            odyssee.authenticate(login, password)
 
     if args.downloadApplications:
         odyssee.download_applications(candidates_folder)
@@ -667,6 +670,7 @@ def main():
         reportRapporteursAvis(config["FILES"]["xlsx-candidats"])
 
     if args.avisPremiereReunion:
+        loadAvisDetailles(xlsx_candidats)
         avisCandidatEtVotePremiereReunion(config["FILES"]["xlsx-candidats"],  odyssee)
 
     if args.convocCandidats:
